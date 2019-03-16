@@ -4,8 +4,8 @@ Translation plugin for vim based on [translate-shell][] utility.
 ## Preamble
 For using this plugin you should install [translate-shell][] first.
 Archlinux users can do it with `$ pacman -S translate-shell`.
-For efficient key maps using you also should set [trans_source] and
-[trans_target] options.
+For efficient key maps using you also should set [trans_source][] and
+[trans_target][] options.
 
 ### Default key maps
 `\t` - translate word under cursor or visually selected.
