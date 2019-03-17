@@ -70,6 +70,7 @@ func s:Translate(bang, ...)
 	" Replace newline symbols by spaces
 	let sp = split(a:000[2], '\n')
 	let pattern = join(sp)
+	let pattern = escape(pattern, '"')
 
 	" If user define use Google Translate API for brief translation
 	if a:bang && g:trans_google_api_for_brief
