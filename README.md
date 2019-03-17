@@ -24,6 +24,16 @@ let g:trans_engine = 'yandex'
 ```
 (string, default `google`)
 
+### g:trans_google_api_for_brief
+Use Google Translate API for brief translation. It is faster then native
+translate-shell engine, but required `wget` utility is installed. Request for
+translation is executed with shell and its utilities `sed` and `awk`. Translation
+limited, only one sentence.
+```vim
+let g:trans_google_api_for_brief = 1
+```
+(numeric, default 0)
+
 ### trans_source
 Translation source language code. Used for translation by key maps. List of all
 available codes can be obtained by `$ trans -reference` shell command.

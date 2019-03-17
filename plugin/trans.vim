@@ -5,6 +5,10 @@
 if !exists('g:trans_engine')
 	let g:trans_engine = 'google'
 endif
+" Use Google Translate API for brief translation
+if !exists('g:trans_google_api_for_brief')
+	g:trans_google_api_for_brief = 0
+endif
 " Source language
 if !exists('g:trans_source')
 	let g:trans_source = 'en'
@@ -63,30 +67,48 @@ func s:Translate(bang, ...)
 	let s:brief = a:bang
 	let s:trans_out = []
 
-	" Make shell command expression
-	" translate-shell program name
-	let cmd = 'trans'
-	" Translation engine
-	let cmd .= ' -e ' . g:trans_engine
-	" Brief translation
-	if a:bang
-		let cmd .= ' -b'
+	" Replace newline symbols by spaces
+	let sp = split(a:000[2], '\n')
+	let pattern = join(sp)
+
+	" If user define use Google Translate API for brief translation
+	if a:bang && g:trans_google_api_for_brief
+		let cmd = ['/bin/sh', '-c',
+					\ s:GoogleTranslateAPI_cmd(a:000[0], a:000[1], pattern)]
+	else
+		" Make shell command expression translate-shell
+		" Program name
+		let cmd = 'trans'
+		" Translation engine
+		let cmd .= ' -e ' . g:trans_engine
+		" Brief translation
+		if a:bang
+			let cmd .= ' -b'
+		endif
+		" Languages
+		let cmd .= ' ' . a:000[0] . ':' . a:000[1]
+		" Pattern
+		let cmd .= ' "' . pattern
+		let ind = 3
+		while ind < len(a:000)
+			let cmd .= ' ' . a:000[ind]
+			let ind += 1
+		endwhile
+		let cmd .= '"'
 	endif
-	" Languages
-	let cmd .= ' ' . a:000[0] . ':' . a:000[1]
-	" Pattern
-	let cmd .= ' "' . a:000[2]
-	let ind = 3
-	while ind < len(a:000)
-		let cmd .= ' ' . a:000[ind]
-		let ind += 1
-	endwhile
-	let cmd .= '"'
 
 	" Run translate-shell asynchronous
 	let s:cur_job = job_start(cmd, {'out_cb': function('s:OutCallbackHandler'),
 				\ 'exit_cb': function('s:ExitCallbackHandler')})
 	echo 'Translating...'
+endfunc
+
+" Google Translate API cmd
+" Args:	sl - source language, tl - target language, text - text for
+" 		translation
+" Returns:	cmd for execution with system() or job_start()
+func s:GoogleTranslateAPI_cmd(sl, tl, text)
+	return 'wget -U "Mozilla/5.0" -qO - "http://translate.googleapis.com/translate_a/single?client=gtx&sl=' . a:sl . '&tl=' . a:tl . '&dt=t&q=$(echo "' . a:text . '" | sed "s/[\"' . "'" . '<>]//g")" | sed "s/,,,0]],,.*//g" | awk -F' . "'" . '"' . "'" . ' ' . "'" . '{print $2}' . "'"
 endfunc
 
 " translate-shell output callback handler
@@ -110,7 +132,7 @@ func s:ExitCallbackHandler(job, exit_status)
 	if s:brief 
 		" just echo translation in command line
 		for msg in s:trans_out
-			echo msg
+			echom msg
 		endfor
 	else
 		" Create new buffer or use existing for translation output
@@ -152,11 +174,13 @@ if s:trans_detailed_map != ''
 endif
 
 func s:BriefTransOnMap(text)
-	exe 'Trans! ' . g:trans_source . ' ' . g:trans_target . ' ' . a:text
+"	exe 'Trans! ' . g:trans_source . ' ' . g:trans_target . ' ' . a:text
+	call s:Translate(1, g:trans_source, g:trans_target, a:text)
 endfunc
 
 func s:DetailedTransOnMap(text)
-	exe 'Trans ' . g:trans_source . ' ' . g:trans_target . ' ' . a:text
+"	exe 'Trans ' . g:trans_source . ' ' . g:trans_target . ' ' . a:text
+	call s:Translate(0, g:trans_source, g:trans_target, a:text)
 endfunc
 
 " This function is modified version of written by xolox and published on
