@@ -108,7 +108,7 @@ endfunc
 " 		translation
 " Returns:	cmd for execution with system() or job_start()
 func s:GoogleTranslateAPI_cmd(sl, tl, text)
-	return 'wget -U "Mozilla/5.0" -qO - "http://translate.googleapis.com/translate_a/single?client=gtx&sl=' . a:sl . '&tl=' . a:tl . '&dt=t&q=$(echo "' . a:text . '" | sed "s/[\"' . "'" . '<>]//g")" | sed "s/,,,0]],,.*//g" | awk -F' . "'" . '"' . "'" . ' ' . "'" . '{print $2}' . "'"
+	return 'wget -U "Mozilla/5.0" -qO - "http://translate.googleapis.com/translate_a/single?client=gtx&sl=' . a:sl . '&tl=' . a:tl . '&dt=t&q=$(echo "' . a:text . '" | sed "s/[\"' . "'" . '<>]//g")" | sed "s/,,,0]],,.*//g" | awk -F' . "'" . '"' . "'" . ' ' . "'" . '{ for (i = 2; i <= NF-4; i+=4) print $i }' . "'"
 endfunc
 
 " translate-shell output callback handler

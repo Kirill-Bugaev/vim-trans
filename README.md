@@ -27,10 +27,7 @@ let g:trans_engine = 'yandex'
 ### g:trans_google_api_for_brief
 Use Google Translate API for brief translation. It is faster then native
 translate-shell engine, but required `wget` utility is installed. Request for
-translation is executed with shell and its utilities `sed` and `awk`. Translation
-limited, only one sentence (This is not Google Translate API restriction, but I am
-too lazy for writing parser of translation request output, among other things I use
-plugin for translating single words principally).
+translation is executed with shell and its utilities `sed` and `awk`.
 ```vim
 let g:trans_google_api_for_brief = 1
 ```
