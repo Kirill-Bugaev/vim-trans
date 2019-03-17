@@ -100,7 +100,7 @@ func s:Translate(bang, ...)
 	" Run translate-shell asynchronous
 	let s:cur_job = job_start(cmd, {'out_cb': function('s:OutCallbackHandler'),
 				\ 'exit_cb': function('s:ExitCallbackHandler')})
-	echo 'Translating...'
+	echom 'Translating...'
 endfunc
 
 " Google Translate API cmd
@@ -162,15 +162,15 @@ endfunc
 if s:trans_brief_map != ''
 	exe 'nnoremap <silent> ' . s:trans_brief_map
 				\ . ' :call <SID>BriefTransOnMap(expand("<cword>"))<CR>'
-	exe 'vnoremap <silent> ' . s:trans_brief_map
-				\ . ' :call <SID>BriefTransOnMap(<SID>get_visual_selection())<CR>'
+	exe 'vnoremap <silent> ' . s:trans_brief_map .' :<C-U>exe'
+				\ . ' "call <SID>BriefTransOnMap(<SID>get_visual_selection())"<CR>'
 endif
 " Detailed translation
 if s:trans_detailed_map != ''
 	exe 'nnoremap <silent> ' . s:trans_detailed_map
 				\ . ' :call <SID>DetailedTransOnMap(expand("<cword>"))<CR>'
-	exe 'vnoremap <silent> ' . s:trans_detailed_map
-				\ . ' :call <SID>DetailedTransOnMap(<SID>get_visual_selection())<CR>'
+	exe 'vnoremap <silent> ' . s:trans_detailed_map . ' :<C-U>exe'
+				\ . ' "call <SID>DetailedTransOnMap(<SID>get_visual_selection())"<CR>'
 endif
 
 func s:BriefTransOnMap(text)
