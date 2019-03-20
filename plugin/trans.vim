@@ -23,13 +23,13 @@ endif
 if exists('g:trans_brief_map')
 	let s:trans_brief_map = g:trans_brief_map
 else
-	let s:trans_brief_map = '\bt'
+	let s:trans_brief_map = '<leader>bt'
 endif
 " Detailed translation
 if exists('g:trans_detailed_map')
 	let s:trans_detailed_map = g:trans_detailed_map
 else
-	let s:trans_detailed_map = '\t'
+	let s:trans_detailed_map = '<leader>t'
 endif
 
 " Translation command

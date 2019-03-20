@@ -8,11 +8,11 @@ For efficient key maps using you also should set `g:trans_source` and
 `g:trans_target` options, see below.
 
 ### Default key maps
-`\t` - translate word under cursor or visually selected.
+`<leader>t` - translate word under cursor or visually selected.
 Translation appears in new window at the bottom of screen which can be closed by `q`
 press.
 
-`\bt` - brief translation. Output will be echoed in Vim command line.
+`<leader>bt` - brief translation. Output will be echoed in Vim command line.
 
 ## Options
 
