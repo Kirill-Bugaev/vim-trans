@@ -1,11 +1,13 @@
 # vim-trans
-Translation plugin for vim based on [translate-shell][] utility.
+Translation plugin for vim based on [translate-shell][] and
+[goldendict][] utilities.
 
 ## Preamble
-For using this plugin you should install [translate-shell][] first.
-Archlinux users can do it with `$ pacman -S translate-shell`.
+For using this plugin you should install [translate-shell][] or [goldendict][] first.
+Archlinux users can do it with `$ pacman -S translate-shell` or
+`$ pacman -S goldendict`.
 For efficient key maps using you also should set `g:trans_source` and
-`g:trans_target` options, see below.
+`g:trans_target` options (only for `g:trans_util = 'translate-shell'`), see below.
 
 ### Default key maps
 `<leader>t` - translate word under cursor or visually selected.
@@ -15,6 +17,15 @@ press.
 `<leader>bt` - brief translation. Output will be echoed in Vim command line.
 
 ## Options
+
+### g:trans_util
+Used translation utility.
+```vim
+let g:trans_util = 'goldendict'
+```
+(string, default `translate-shell`)
+
+### Options below work only with `g:trans_util = 'translate-shell'`
 
 ### trans_engine
 Translation engine. List of all supported engines can be obtained by
@@ -90,3 +101,4 @@ Translate {text} from {source-lang-code} language to {target-lang-code} language
 ```
 
 [translate-shell]: https://github.com/soimort/translate-shell
+[goldendict]: https://www.goldendict.org

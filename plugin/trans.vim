@@ -1,6 +1,9 @@
 " Brief translation plugin based on translate-shell utility
 
 " Translate options, default values
+if !exists('g:trans_util')
+	let g:trans_util = 'translate-shell'
+endif
 " Translate engine
 if !exists('g:trans_engine')
 	let g:trans_engine = 'google'
@@ -74,10 +77,14 @@ func s:Translate(bang, ...)
 	" Replace newline symbols by spaces
 	let sp = split(a:000[2], '\n')
 	let pattern = join(sp)
-	let pattern = escape(pattern, '"')
+	if g:trans_util !=? 'goldendict'
+		let pattern = escape(pattern, '"')
+	endif
 
+	if g:trans_util ==? 'goldendict'
+		let cmd = 'goldendict "' . pattern . '"'
 	" If user define use Google Translate API for brief translation
-	if a:bang && g:trans_google_api_for_brief
+	elseif a:bang && g:trans_google_api_for_brief
 		let cmd = ['/bin/sh', '-c',
 					\ s:GoogleTranslateAPI_cmd(a:000[0], a:000[1], pattern)]
 	else
@@ -102,7 +109,12 @@ func s:Translate(bang, ...)
 		let cmd .= '"'
 	endif
 
-	" Make NULL request
+	" If goldendict
+	if g:trans_util ==? 'goldendict'
+		call job_start(cmd)
+		return
+	endif
+	" Make NULL request for Google API brief translation
 	if a:bang && g:trans_google_api_for_brief && g:trans_twice
 		call job_start(cmd)
 	endif
