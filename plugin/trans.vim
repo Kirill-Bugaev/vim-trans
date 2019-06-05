@@ -17,6 +17,10 @@ endif
 if !exists('g:trans_target')
 	let g:trans_target = 'ru'
 endif
+" Twice request (for g:trans_google_api_for_brief = 1 only)
+if !exists('g:trans_twice')
+	let g:trans_twice = 0
+endif
 
 " Maps options
 " Brief translation
@@ -98,6 +102,10 @@ func s:Translate(bang, ...)
 		let cmd .= '"'
 	endif
 
+	" Make NULL request
+	if a:bang && g:trans_google_api_for_brief && g:trans_twice
+		call job_start(cmd)
+	endif
 	" Run translate-shell asynchronous
 	let s:cur_job = job_start(cmd, {'out_cb': function('s:OutCallbackHandler'),
 				\ 'exit_cb': function('s:ExitCallbackHandler')})

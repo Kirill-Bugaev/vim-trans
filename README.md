@@ -49,6 +49,14 @@ let g:trans_target = 'es'
 ```
 (string, default `ru`)
 
+### trans_twice
+Make brief translation request twice. Sometimes translation can be obtained faster
+if send translation request twice. Works only with `g:trans_google_api_for_brief = 1`.
+```vim
+let g:trans_twice = 1
+```
+(string, default `0`)
+
 ## Key maps
 Key maps can be invoked both for word under cursor and for visually selected text.
 If you want to switch off one of key maps define appropriate global variable with empty string value. Example:
